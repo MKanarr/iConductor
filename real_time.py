@@ -1,7 +1,23 @@
 import pyaudio
-import matplotlib.pyplot as plt
 import numpy as np
 import time
+import bisect
+import math
+
+pitches = {
+	261.6: "C",
+	277.2: "C#",
+	293.6: "D",
+	311.1: "D#",
+	329.6: "E",
+	349.2: "F",
+	370.0: "F#",
+	392.0: "G",
+	415.3: "Ab",
+	440.0: "A",
+	466.2: "Bb",
+	493.9: "B" 	
+}
 
 form_1 = pyaudio.paInt16 # 16-bit resolution
 chans = 1 # 1 channel
@@ -28,6 +44,7 @@ mic_sens_corr = np.power(10.0,mic_sens_dBV/20.0) # calculate mic sensitivity con
 # (USB=5V, so 15 bits are used (the 16th for negatives)) and the manufacturer microphone sensitivity corrections
 data = ((data/np.power(2.0,15))*5.25)*(mic_sens_corr) 
 
+
 # compute FFT parameters
 f_vec = samp_rate*np.arange(chunk/2)/chunk # frequency vector based on window size and sample rate
 mic_low_freq = 100 # low frequency response of the mic (mine in this case is 100 Hz)
@@ -37,26 +54,14 @@ fft_data[1:] = 2*fft_data[1:]
 
 max_loc = np.argmax(fft_data[low_freq_loc:])+low_freq_loc
 
-# plot
-plt.style.use('ggplot')
-plt.rcParams['font.size']=18
-fig = plt.figure(figsize=(13,8))
-ax = fig.add_subplot(111)
-plt.plot(f_vec,fft_data)
-ax.set_ylim([0,2*np.max(fft_data)])
-plt.xlabel('Frequency [Hz]')
-plt.ylabel('Amplitude [Pa]')
-ax.set_xscale('log')
-plt.grid(True)
+target = f_vec[max_loc]
 
-# max frequency resolution 
-plt.annotate(r'$\Delta f_{max}$: %2.1f Hz' % (samp_rate/(2*chunk)),xy=(0.7,0.92),\
-             xycoords='figure fraction')
+notes = list(pitches.values())
+real_values = np.array(list(pitches.keys()))
+target_arr = np.empty(len(real_values), dtype=float)
+target_arr.fill(target)
+diff = np.subtract(real_values, target_arr)
+idx = (diff >= float(-3)) * (diff <= float(3))
+index = np.where(idx)
 
-# annotate peak frequency
-annot = ax.annotate('Freq: %2.1f'%(f_vec[max_loc]),xy=(f_vec[max_loc],fft_data[max_loc]),\
-                    xycoords='data',xytext=(0,30),textcoords='offset points',\
-                    arrowprops=dict(arrowstyle="->"),ha='center',va='bottom')
-    
-plt.savefig('fft_1kHz_signal.png',dpi=300,facecolor='#FCFCFC')
-plt.show()
+print('Note: ', notes[index[0][0]])
