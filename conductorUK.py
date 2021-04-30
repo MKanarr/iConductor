@@ -13,32 +13,60 @@ myCorrection=0.45
 maxPW=(2.0+myCorrection)/1000
 minPW=(1.0-myCorrection)/1000
 
-# left and right x axis
+# motor connected to left of robot moves arm up and down
 myServo = Servo(27,min_pulse_width=minPW,max_pulse_width=maxPW)
-# up and down y axis
+# motor connected to right of robot moves arm forward
 myServo1 = Servo(22,min_pulse_width=minPW,max_pulse_width=maxPW)
+# motor connected to base of robot moves arm left and right
+myServo2 = Servo(17,min_pulse_width=minPW,max_pulse_width=maxPW)
 
 #tempo = input("Enter tempo in BPM: ")
 
-#click_interval = 60 / int(tempo)
+#click_interval=60/int(tempo)
 
-#now = time.time()
-#next_click = now + click_interval
-
-while True:
-    #now = time.time()
-    
-    #if now >= next_clik:
-
-
-    #myServo.value=(0.7)
+#2/4 pattern
+sleep(0.5)
+myServo.value=0
+myServo1.value=0
+myServo2.value=0
+sleep(0.5)
+myServo.value=0.5
+myServo1.value=-0.5
+sleep(0.5)
+myServo.value=-0.025
+myServo1.value=0.025
+myServo2.value=0.5
+sleep(0.5)
+myServo.value=0.5
+myServo1.value=-0.5
+myServo2.value=0
+sleep(0.5)
+myServo.value=0
+myServo1.value=0
+myServo2.value=0
+sleep(0.5)
+#3/4 pattern
+'''
+while True: 
+    #print("debugging servo") 
+    #print("0")
+    sleep(0.5)
     myServo.value=0
-    myServo1.value=1
-    sleep(2)
-    #myServo.value=(-0.7)
-    myServo.value=-1
-    myServo1.value=1
-    sleep(2)
-    myServo.value=-1
-    myServo1.value=-1
-    sleep(4)
+    myServo1.value=0
+    myServo2.value=0
+    sleep(0.5)
+    #print("0.5")
+    myServo.value=0.5   
+    myServo1.value=-0.5
+    myServo2.value=0
+    sleep(0.5)
+    #print("0")
+    myServo2.value=0.5
+    #myServo.value=0
+    #myServo1.value=0
+    sleep(0.5)
+    myServo.value=0 
+    myServo1.value=0
+    myServo2.value=0
+    sleep(0.5)
+'''
