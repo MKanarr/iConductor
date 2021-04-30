@@ -165,13 +165,13 @@ class SevenSegmentDisplay(LEDBoard):
             raise ValueError('a character layout must have 7 segments')
         self._layouts[char] = layout
 
-sevsegdisp = SevenSegmentDisplay(5, 6, 13, 19, 26, 12, 20)
-sevsegdisp2 = SevenSegmentDisplay(4, 17, 27, 22, 18, 23, 24)
-sevsegdisp.display(notes[index[0][0]])
-sevsegdisp2.display(notes[index[0][0]])
-time.sleep(15)
-sevsegdisp.display(" ")
-sevsegdisp2.display(" ")
+# sevsegdisp = SevenSegmentDisplay(5, 6, 13, 19, 26, 12, 20)
+# sevsegdisp2 = SevenSegmentDisplay(4, 17, 27, 22, 18, 23, 24)
+# sevsegdisp.display(notes[index[0][0]])
+# sevsegdisp2.display(notes[index[0][0]])
+# time.sleep(15)
+# sevsegdisp.display(" ")
+# sevsegdisp2.display(" ")
 
 pitches = {
 	261.6: "C",
@@ -187,6 +187,11 @@ pitches = {
 	466.2: "Bb",
 	493.9: "B" 	
 }
+
+# top 
+sevsegdisp = SevenSegmentDisplay(5, 6, 13, 19, 26, 12, 20)
+# bot
+sevsegdisp2 = SevenSegmentDisplay(4, 17, 27, 22, 18, 23, 24)
 
 form_1 = pyaudio.paInt16 # 16-bit resolution
 chans = 1 # 1 channel
@@ -236,7 +241,18 @@ note = notes[index[0][0]]
 
 if "#" in note:
     print("sharp")
+    sevsegdisp.display(note[0])
+    sevsegdisp2.display("=")
 elif "b" in note:
     print("flat")
+    sevsegdisp.display(note[0])
+    sevsegdisp2.display("-")
+else:
+    sevsegdisp.display(note[0])
+    sevsegdisp2.display(" ")
 
-print('Note: ', notes[index[0][0]])
+print('Note: ', note)
+
+time.sleep(10)
+sevsegdisp.display(" ")
+sevsegdisp2.display(" ")
