@@ -31,7 +31,7 @@ while True:
     myServo1.value=-0.5
     myServo2.value=0
     sleep(1)
+    myServo.value=0.5   
+    myServo1.value=-0.5
     myServo2.value=0.5
-    myServo.value=0
-    myServo1.value=0
     sleep(1)
